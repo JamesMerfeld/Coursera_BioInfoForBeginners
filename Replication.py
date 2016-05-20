@@ -6,6 +6,15 @@ def PatternCount(Pattern, Text):
         if Text[i:i+len(Pattern)] == Pattern:
                 count = count+1
     return count
+
+# Input:  Two strings, Pattern and Genome
+# Output: A list containing all starting positions where Pattern appears as a substring of Genome
+def PatternMatching(Pattern, Genome):
+    positions = [] # output variable
+    for i in range(len(Genome)-len(Pattern)+1):
+        if Genome[i:i+len(Pattern)] == Pattern:       
+            positions.append(i)
+    return positions
     
 # Input:  A string Text and an integer k
 # Output: A list containing all most frequent k-mers in Text
@@ -77,11 +86,6 @@ def ReverseComplement(Pattern):
             print("Error:Invalid Character")
     return "".join(revComp)
 
-Text1 = "ATGATCAAG"
-Text2 = "CTTGATCAT"
-Text3 = "TCTTGATCA"
-Text4 = "CTCTTGATC"
-print(Text1)
-print(ReverseComplement(Text2))
-print(Text2)
-print(ReverseComplement(Text1))
+Pattern = "CTTGATCAT"
+Genome = "CTTGATCATCTTGATCATCTTGATCAT"
+print(PatternMatching(Pattern, Genome))
