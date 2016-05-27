@@ -118,3 +118,45 @@ def Skew(Genome):
         elif Genome[i-1] == "C":
             skew[i] = skew[i]-1
     return skew
+    
+def MinimumSkew2(Genome):
+    array = Skew(Genome).values()
+    minimum = array.index(min(array))
+    positions = []
+    for i in range(len(array)):
+        if array[i] == array[minimum]:
+            positions.append(i)
+    return positions
+        
+def MinimumSkew(Genome):
+    array = list(Skew(Genome).values())
+    minimum = min(array)
+    positions = []
+    for i in range(len(array)):
+        if array[i] == minimum:
+            positions.append(i)
+    return positions
+
+def HammingDistance(p,q):
+    distance = 0
+    if (len(p) != len(q)):
+        print("ERROR: Input string must be of the same length")
+        return len(p)+len(q)
+    for i in range(len(p)):
+        if (p[i] != q[i]):
+            distance = distance + 1 
+    return distance
+    
+def ApproximatePatternMatching(Pattern, Text, d):
+    positions = [] # output variable
+    for i in range(len(Text)-len(Pattern)+1):
+        if HammingDistance(Pattern,Text[i:i+len(Pattern)]) <= d:
+            positions.append(i)
+    return positions
+    
+def ApproximatePatternCount(Pattern, Text, d):
+    count = 0 # output variable
+    for i in range(len(Text)-len(Pattern)+1):
+        if HammingDistance(Pattern, Text[i:i+len(Pattern)]) <= d:
+                count = count+1
+    return count
