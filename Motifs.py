@@ -62,16 +62,19 @@ def ProfileMostProbablePattern(Text, k, Profile):
             pMax = pTemp
             index = i
     return Text[index:index+k]
-        
-        
-    
-Text = "ACCTGTTTATTGCCTAAGTTCCGAACAAACCCAATATAGCCCGAGGGCCT"
 
-k = 5
+def GreedyMotifSearch(Dna, k, t):
+    BestMotifs = []
+    for i in range(0,t):
+        BestMotifs.append(Dna[i][0:k])
+    n = len(Dna[0])
+    for i in range(n-k+1):
+        Motifs = []
+        Motifs.append(Dna[0][i:i+k])
+        for j in range(1,t):
+            P = Profile(Motifs[0:j])
+            Motifs.append(ProfileMostProbablePattern(Dna[j], k, P))
+        if Score(Motifs) < Score(BestMotifs):
+            BestMotifs = Motifs
+    return BestMotifs
 
-Profile = {'A': [0.2, 0.2, 0.3, 0.2, 0.3],
-'C': [0.4, 0.3, 0.1, 0.5, 0.1],
-'G': [0.3, 0.3, 0.5, 0.2, 0.4],
-'T': [0.1, 0.2, 0.1, 0.1, 0.2]}
-
-print(ProfileMostProbablePattern(Text, k, Profile))
