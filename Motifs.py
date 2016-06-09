@@ -140,3 +140,88 @@ def RandomizedMotifSearch(Dna, k, t):
             BestMotifs = M
         else:
             return BestMotifs
+
+def Normalize(Probabilities):
+    sum = 0
+    for key in Probabilities:
+        sum = sum + Probabilities[key]
+    for key in Probabilities:
+        Probabilities[key] = Probabilities[key]/float(sum)
+    return Probabilities
+
+def WeightedDie(Probabilities):
+    kmer = '' # output variable
+    p = random.uniform(0,1)
+    val = 0
+    for key in Probabilities:
+        if val < p < (val + Probabilities[key]):
+            kmer = key
+            break
+        else:
+            val = val + Probabilities[key]
+    return kmer
+
+def ProfileGeneratedString(Text, profile, k):
+    n = len(Text)
+    probabilities = {}
+    for i in range(0,n-k+1):
+        probabilities[Text[i:i+k]] = Pr(Text[i:i+k], profile)
+    probabilities = Normalize(probabilities)
+    return WeightedDie(probabilities)
+
+def GibbsSampler(Dna, k, t, N):
+    M = RandomMotifs(Dna, k, t)
+    BestMotifs = M
+    for j in range(1,N):
+        i = random.randint(1,t-1)
+        temp = M[i]
+        profile = ProfileWithPseudocounts(M[:i]+M[i+1:])
+        M[i] = ProfileGeneratedString(Dna[i], profile, k)
+    if Score(M) < Score(BestMotifs):
+        BestMotifs = M
+    else:
+        return BestMotifs
+
+'''
+Dna = ["ATGAGGTC", "ATGAGGTC", "ATGAGGTC", "ATGAGGTC"]
+M = ["GTC", "CCC", "ATA", "GCT"]
+
+#Profile = ProfileWithPseudocounts(M)
+#M = Motifs(Profile, Dna)
+#print(M)
+print(Motifs(Profile(M), Dna))
+'''
+
+'''
+acount = 0
+bcount = 0
+ccount = 0
+
+runs = 100000
+
+for i in range (runs):
+    y=random.randint(1,10)
+    if y>=1 and y < 3:
+        acount = acount + 1
+    elif y>=3 and y<=7:
+        bcount = bcount + 1
+    else: ccount = ccount +1
+
+print(acount/float(runs))
+print(bcount/float(runs))
+print(ccount/float(runs))
+'''
+
+'''
+p = [0.15, 0.6, 0.225, 0.225, 0.3]
+q = []
+
+sum = 0
+for num in p:
+    sum = sum + num
+
+for i in range(len(p)):
+    p[i] = p[i]/sum
+
+print p
+'''
